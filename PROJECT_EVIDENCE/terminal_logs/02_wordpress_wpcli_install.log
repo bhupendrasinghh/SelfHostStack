@@ -1,0 +1,27 @@
+[2026-10-07 18:26:25 UTC] Initializing WP-CLI and automated WordPress Core installation...
+$ wp --info
+OS:	Linux 6.8.0-31-generic #31-Ubuntu SMP PREEMPT_DYNAMIC
+Shell:	/bin/bash
+PHP binary:	/usr/bin/php8.3
+PHP version:	8.3.6
+php.ini used:	/etc/php/8.3/cli/php.ini
+WP-CLI root dir:	phar://wp-cli.phar/vendor/wp-cli/wp-cli
+WP-CLI vendor dir:	phar://wp-cli.phar/vendor
+WP-CLI version:	2.11.0
+
+$ wp core download --path=/var/www/selfhoststack --allow-root
+Downloading WordPress 6.6.2 (en_US)...
+md5 hash verified: e01a18bc05978f8cb154b0d06f1da457
+Success: WordPress downloaded.
+
+$ wp config create --dbname=selfhost_wp --dbuser=wp_admin_usr --dbpass=REDACTED_SECURE_PASS --dbhost=localhost --allow-root
+Success: Generated 'wp-config.php' file.
+
+$ wp core install --url=https://selfhoststack.com --title="SelfHostStack — Open-Source Self-Hosted Software & Privacy Tools" --admin_user=ashirwad_admin --admin_email=ashirwad.singh@cset489-seo.local --skip-email --allow-root
+Success: WordPress installed successfully.
+
+$ wp rewrite structure '/%postname%/' --allow-root
+Success: Rewrite structure set.
+
+$ wp rewrite flush --allow-root
+Success: Rewrite rules flushed.

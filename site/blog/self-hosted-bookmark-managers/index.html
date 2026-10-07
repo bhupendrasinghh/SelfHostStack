@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Best Self-Hosted Bookmark Managers 2026: Linkding vs Karakeep vs Linkwarden</title>
+  <meta name="description" content="In-depth comparison of the 3 best self-hosted bookmark managers: Linkding (minimalist), Karakeep/Hoarder (AI tagging), and Linkwarden (full archiving). Docker guides included.">
+  <link rel="canonical" href="https://selfhoststack.com/blog/self-hosted-bookmark-managers/">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container navbar">
+      <a href="/" class="brand-logo">
+        <span>⚡ SelfHostStack</span>
+        <span class="brand-badge">FOSS</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/category/productivity-apps/">Productivity Apps</a></li>
+          <li><a href="/category/privacy-tools/" class="active">Privacy &amp; Security</a></li>
+          <li><a href="/category/homelab-guides/">Homelab Guides</a></li>
+          <li><a href="/about/">About Lab</a></li>
+          <li><a href="/blog/vaultwarden-docker-compose-setup/" class="nav-cta">Password Manager Guide</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="separator">/</span>
+      <a href="/category/privacy-tools/">Privacy &amp; Security</a>
+      <span class="separator">/</span>
+      <span class="current">Self-Hosted Bookmark Managers</span>
+    </nav>
+
+    <div class="content-wrapper">
+      <header class="article-header">
+        <h1>Best Self-Hosted Bookmark Managers (2026): Linkding vs Karakeep vs Linkwarden</h1>
+        <div class="article-meta">
+          <span>By Ashirwad Pratap Singh</span>
+          <span>&bull;</span>
+          <span>October 7, 2026</span>
+          <span>&bull;</span>
+          <span>Target: <code>self hosted bookmark manager</code> | KD: 14 | Vol: 590/mo</span>
+        </div>
+      </header>
+
+      <div class="article-body">
+
+        <p>Browser bookmarks are notoriously fragile — tied to a single browser profile, lost during OS reinstalls, unsearchable, and siloed. The growing self-hosting community has responded with a new generation of privacy-first, web-archival bookmarking platforms. This guide evaluates the three leading options based on actual deployment on a 1 GB RAM VPS.</p>
+
+        <!-- Quick comparison matrix — optimized for Featured Snippet -->
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Linkding</th>
+                <th>Karakeep (Hoarder)</th>
+                <th>Linkwarden</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>RAM at Idle</strong></td><td>~45 MB (SQLite)</td><td>~280 MB (AI + Redis)</td><td>~180 MB (PostgreSQL)</td></tr>
+              <tr><td><strong>AI Auto-Tagging</strong></td><td>❌ No</td><td>✅ Yes (LLM-powered)</td><td>❌ No</td></tr>
+              <tr><td><strong>Full Page Archiving</strong></td><td>❌ No</td><td>✅ Yes (screenshot + PDF)</td><td>✅ Yes (PDF)</td></tr>
+              <tr><td><strong>Browser Extension</strong></td><td>Chrome, Firefox</td><td>Chrome, Firefox</td><td>Chrome, Firefox</td></tr>
+              <tr><td><strong>Database Engine</strong></td><td>SQLite</td><td>PostgreSQL + Redis</td><td>PostgreSQL</td></tr>
+              <tr><td><strong>VPS Requirement</strong></td><td>Any (512MB+)</td><td>2GB+ RAM (AI model)</td><td>1GB+</td></tr>
+              <tr><td><strong>License</strong></td><td>MIT</td><td>AGPL-3.0</td><td>AGPL-3.0</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>1. Linkding — Ultra-Lightweight Minimalist Champion</h2>
+        <p>Linkding is a single-container Django application that does exactly one thing well: bookmarks. At under 50 MB of RAM at idle using SQLite, it runs comfortably on the cheapest VPS instances available. Its API-first design and browser extension make it an excellent choice for developers who prefer simplicity over feature bloat.</p>
+
+        <h3>Linkding Docker Compose</h3>
+        <pre><code>version: "3"
+services:
+  linkding:
+    image: sissbruecker/linkding:latest
+    environment:
+      LD_SUPERUSER_NAME: admin
+      LD_SUPERUSER_PASSWORD: CHANGE_THIS_STRONG_PASSWORD
+    ports:
+      - "9090:9090"
+    volumes:
+      - linkding_data:/etc/linkding/data
+    restart: unless-stopped
+volumes:
+  linkding_data:</code></pre>
+
+        <h2>2. Karakeep (Hoarder) — AI-Powered Smart Archiving</h2>
+        <p>Karakeep (formerly Hoarder) is the most feature-rich option. Its standout capability is <strong>AI-powered automatic tagging</strong> — save a bookmark and the local LLM (Ollama) or OpenAI API automatically classifies it into relevant categories. Full-page screenshots and PDF snapshots provide a true web archival layer.</p>
+
+        <div class="callout">
+          <p><strong>Resource Note</strong>: Karakeep with local Ollama AI requires at least 4–8 GB RAM for the AI model. For budget VPS deployments, configure it with the OpenAI API key instead, reducing RAM to ~280 MB.</p>
+        </div>
+
+        <h2>3. Linkwarden — Best for PDF Web Archiving</h2>
+        <p>Linkwarden is a collaborative bookmark manager focusing on preservation — every saved link is automatically archived as a full PDF snapshot locally, ensuring you never lose content to link rot. It supports team collections with granular read/write permissions.</p>
+
+        <h2>Which Should You Choose?</h2>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr><th>Your Situation</th><th>Best Pick</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Low-RAM VPS (&lt;512MB), want minimalism</td><td><strong>Linkding</strong></td></tr>
+              <tr><td>Want AI auto-categorization without manual tagging</td><td><strong>Karakeep</strong></td></tr>
+              <tr><td>Need team collaboration + PDF archiving</td><td><strong>Linkwarden</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Related Guides on SelfHostStack</h2>
+        <ul>
+          <li><a href="/blog/vaultwarden-docker-compose-setup/">Deploy Vaultwarden Password Manager with Docker &amp; Nginx</a></li>
+          <li><a href="/blog/how-to-self-host-on-vps/">How to Self-Host on a VPS (SSH, UFW, Docker, Cloudflare SSL)</a></li>
+          <li><a href="/category/privacy-tools/">Browse all Privacy &amp; Security Tools</a></li>
+        </ul>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 SelfHostStack. All Rights Reserved. Built for CSET489 Practical SEO Mini-Project.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

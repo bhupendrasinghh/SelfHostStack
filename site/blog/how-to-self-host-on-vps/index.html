@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Self-Host on a Cloud VPS: Zero-to-Production Blueprint — SelfHostStack</title>
+  <meta name="description" content="Complete step-by-step guide to self-hosting on a Linux VPS: SSH key generation, UFW firewall, Docker Engine install, Nginx reverse proxy, and Cloudflare Full Strict SSL.">
+  <link rel="canonical" href="https://selfhoststack.com/blog/how-to-self-host-on-vps/">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Self-Host on a Cloud VPS",
+    "description": "A step-by-step guide to provisioning a Linux VPS and deploying Docker-based self-hosted applications behind an Nginx reverse proxy with Cloudflare SSL.",
+    "author": { "@type": "Person", "name": "Ashirwad Pratap Singh" },
+    "step": [
+      {"@type": "HowToStep", "name": "Provision Cloud VPS", "text": "Create a Ubuntu 24.04 LTS droplet/instance on DigitalOcean, Vultr, or AWS Lightsail."},
+      {"@type": "HowToStep", "name": "Generate SSH Key Pair", "text": "Run ssh-keygen -t ed25519 to create a secure key pair."},
+      {"@type": "HowToStep", "name": "Configure UFW Firewall", "text": "Enable ufw and allow SSH (22), HTTP (80), and HTTPS (443)."},
+      {"@type": "HowToStep", "name": "Install Docker Engine", "text": "Install Docker and Docker Compose V2 using the official apt repository."},
+      {"@type": "HowToStep", "name": "Configure Cloudflare DNS + SSL", "text": "Add A record in Cloudflare pointing to VPS IP, enable Full (Strict) SSL mode."},
+      {"@type": "HowToStep", "name": "Set Up Nginx Reverse Proxy", "text": "Install Nginx and configure a server block routing traffic to Docker containers."}
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container navbar">
+      <a href="/" class="brand-logo">
+        <span>⚡ SelfHostStack</span>
+        <span class="brand-badge">FOSS</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/category/productivity-apps/">Productivity Apps</a></li>
+          <li><a href="/category/privacy-tools/">Privacy &amp; Security</a></li>
+          <li><a href="/category/homelab-guides/" class="active">Homelab Guides</a></li>
+          <li><a href="/about/">About Lab</a></li>
+          <li><a href="/blog/open-source-notion-alternatives/" class="nav-cta">Featured Guide</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="separator">/</span>
+      <a href="/category/homelab-guides/">Homelab Guides</a>
+      <span class="separator">/</span>
+      <span class="current">How to Self-Host on a VPS</span>
+    </nav>
+
+    <div class="content-wrapper">
+      <header class="article-header">
+        <h1>How to Self-Host on a Cloud VPS: Zero-to-Production Blueprint</h1>
+        <div class="article-meta">
+          <span>By Ashirwad Pratap Singh</span>
+          <span>&bull;</span>
+          <span>October 7, 2026</span>
+          <span>&bull;</span>
+          <span>Target: <code>how to self host on a vps</code> | KD: 16 | Vol: 480/mo</span>
+        </div>
+      </header>
+
+      <div class="article-body">
+
+        <div class="callout">
+          <p><strong>What You'll Build</strong>: A fully secured Ubuntu 24.04 LTS VPS with SSH key authentication, UFW firewall, Docker Engine, an Nginx reverse proxy with Cloudflare Full (Strict) TLS 1.3, and your first self-hosted container running live under your custom domain.</p>
+        </div>
+
+        <p>Most beginner guides to self-hosting either stop at "SSH into your server and run a Docker command" or bury critical security steps in footnotes. This guide delivers the <em>complete production architecture</em> — including the networking, security, and DNS layers that cloud tutorials consistently omit.</p>
+
+        <h2>Step 1: Provision Your Cloud VPS</h2>
+        <p>Choose a VPS provider offering fast NVMe storage and a nearby datacenter. For a beginner homelab running 3–5 Docker containers, a <strong>1 vCPU / 1–2 GB RAM / 25 GB SSD</strong> instance is sufficient. Recommended providers:</p>
+        <ul>
+          <li><strong>DigitalOcean Droplets</strong> — intuitive UI, $6/month for 1GB RAM</li>
+          <li><strong>Hetzner Cloud</strong> — best value in EU, €4/month for 2GB RAM</li>
+          <li><strong>Vultr</strong> — global datacenter presence, good India coverage</li>
+          <li><strong>AWS Lightsail</strong> — AWS reliability with flat pricing at $5/month</li>
+        </ul>
+
+        <p>Select <strong>Ubuntu 24.04 LTS</strong> as the operating system. During provisioning, paste your SSH public key (generated in Step 2) into the "SSH Keys" field.</p>
+
+        <h2>Step 2: Generate a Secure SSH Ed25519 Key Pair</h2>
+        <p>On your local machine (Windows PowerShell, macOS Terminal, or Linux bash):</p>
+        <pre><code>ssh-keygen -t ed25519 -C "your-email@example.com" -f ~/.ssh/id_ed25519_vps</code></pre>
+
+        <p>This generates two files:
+        <br><code>~/.ssh/id_ed25519_vps</code> — Private key (never share this)
+        <br><code>~/.ssh/id_ed25519_vps.pub</code> — Public key (paste this into your VPS provider)</p>
+
+        <h2>Step 3: Initial Server Login &amp; Non-Root User Setup</h2>
+        <pre><code># Connect to VPS as root initially
+ssh -i ~/.ssh/id_ed25519_vps root@YOUR_VPS_IP
+
+# Create non-root admin user
+adduser deploy_admin
+usermod -aG sudo deploy_admin
+
+# Copy SSH authorized_keys to new user
+rsync --archive --chown=deploy_admin:deploy_admin ~/.ssh /home/deploy_admin/</code></pre>
+
+        <h2>Step 4: SSH Daemon Hardening</h2>
+        <p>Create a security override config file to disable root login and password authentication:</p>
+        <pre><code>sudo nano /etc/ssh/sshd_config.d/99-security.conf</code></pre>
+        <pre><code>PermitRootLogin no
+PasswordAuthentication no
+PubkeyAuthentication yes
+MaxAuthTries 4
+X11Forwarding no</code></pre>
+        <pre><code>sudo systemctl restart ssh</code></pre>
+
+        <h2>Step 5: UFW Firewall Configuration</h2>
+        <pre><code>sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow 22/tcp comment 'SSH'
+sudo ufw allow 80/tcp comment 'HTTP (Cloudflare proxy)'
+sudo ufw allow 443/tcp comment 'HTTPS (Cloudflare proxy)'
+sudo ufw enable
+sudo ufw status verbose</code></pre>
+
+        <h2>Step 6: Install Docker Engine &amp; Docker Compose V2</h2>
+        <pre><code># Install prerequisites
+sudo apt update && sudo apt install -y ca-certificates curl
+
+# Add Docker's official GPG key
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add Docker apt repository
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] \
+  https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
+  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Add non-root user to docker group
+sudo usermod -aG docker deploy_admin
+newgrp docker
+
+# Verify
+docker --version && docker compose version</code></pre>
+
+        <h2>Step 7: Cloudflare DNS Configuration</h2>
+        <p>In your Cloudflare dashboard for your domain:</p>
+        <ol>
+          <li>Add an <strong>A record</strong>: Name = <code>@</code>, Value = <code>YOUR_VPS_IP</code>, Proxy status = <strong>Proxied (orange cloud)</strong>.</li>
+          <li>Add a <strong>CNAME record</strong>: Name = <code>www</code>, Target = <code>yourdomain.com</code>, Proxied.</li>
+          <li>Under <strong>SSL/TLS → Overview</strong>, select <strong>Full (Strict)</strong> mode.</li>
+          <li>Enable <strong>Always Use HTTPS</strong>.</li>
+        </ol>
+
+        <h2>Step 8: Nginx Reverse Proxy Setup</h2>
+        <pre><code>sudo apt install -y nginx
+sudo systemctl enable nginx</code></pre>
+
+        <p>Create your first application site block:</p>
+        <pre><code>sudo nano /etc/nginx/sites-available/yourdomain.com</code></pre>
+        <pre><code>server {
+    listen 80;
+    server_name yourdomain.com www.yourdomain.com;
+    root /var/www/yourdomain;
+    index index.html index.php;
+
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+    }
+}</code></pre>
+        <pre><code>sudo ln -s /etc/nginx/sites-available/yourdomain.com /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx</code></pre>
+
+        <h2>Verification Checklist</h2>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr><th>Check</th><th>Command</th><th>Expected Result</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Nginx Active</td><td><code>systemctl is-active nginx</code></td><td><code>active</code></td></tr>
+              <tr><td>UFW Rules</td><td><code>ufw status numbered</code></td><td>22, 80, 443 ALLOW</td></tr>
+              <tr><td>Docker Running</td><td><code>docker info</code></td><td>Server version output</td></tr>
+              <tr><td>HTTPS Redirect</td><td><code>curl -I http://yourdomain.com</code></td><td>301 → https://</td></tr>
+              <tr><td>SSL Valid</td><td><code>curl -Iv https://yourdomain.com 2>&1 | grep "SSL connection"</code></td><td>TLSv1.3</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Next Steps</h2>
+        <ul>
+          <li><a href="/blog/vaultwarden-docker-compose-setup/">Deploy Vaultwarden Password Manager behind your new reverse proxy</a></li>
+          <li><a href="/blog/self-hosted-bookmark-managers/">Add a Self-Hosted Bookmark Manager (Linkding, Karakeep, or Linkwarden)</a></li>
+          <li><a href="/blog/open-source-notion-alternatives/">Self-Host a Notion Alternative: AppFlowy or Docmost</a></li>
+        </ul>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 SelfHostStack. All Rights Reserved. Built for CSET489 Practical SEO Mini-Project.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

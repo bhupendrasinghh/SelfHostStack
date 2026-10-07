@@ -1,0 +1,36 @@
+[2026-10-07 18:26:48 UTC] Executing verify_server.sh diagnostic test suite...
+==================================================================
+    SelfHostStack: Milestone I Server Health & Verification       
+    Date: 2026-10-07T18:26:48Z                       
+==================================================================
+
+--- 1. Web & Database Services Status ---
+[PASS] Service 'nginx' is running and active.
+[PASS] Service 'mariadb' is running and active.
+[PASS] Service 'php8.3-fpm' is running and active.
+
+--- 2. Firewall Status (UFW) ---
+[PASS] UFW Firewall is active.
+Status: active
+
+     To                         Action      From
+     --                         ------      ----
+[ 1] 22/tcp (SSH)               ALLOW IN    Anywhere                  
+[ 2] 80/tcp (HTTP)              ALLOW IN    Anywhere                  
+[ 3] 443/tcp (HTTPS)            ALLOW IN    Anywhere                  
+[ 4] 22/tcp (SSH (v6))          ALLOW IN    Anywhere (v6)             
+[ 5] 80/tcp (HTTP (v6))         ALLOW IN    Anywhere (v6)             
+[ 6] 443/tcp (HTTPS (v6))       ALLOW IN    Anywhere (v6)             
+
+--- 3. Database Connectivity ---
+[PASS] MySQL daemon is responsive to local ping.
+
+--- 4. WordPress Installation & WP-CLI Diagnostics ---
+[PASS] WP-CLI is installed. WordPress Core version detected: 6.6.2
+
+--- 5. Local Web Server HTTP Response ---
+[PASS] Local HTTP endpoint returned status 200.
+
+==================================================================
+ Verification Complete: 7 / 7 Checks Passed.
+==================================================================

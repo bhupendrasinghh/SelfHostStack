@@ -1,0 +1,9 @@
+Term,Intent,Competition,Relevance_Score,Related_Primary_Keyword,Target_Page
+"appflowy vs notion self hosted",Commercial,Very Low,9.5/10,"open source notion alternative","/blog/open-source-notion-alternatives/"
+"how to install docker on ubuntu vps",Informational,Low,9.8/10,"how to self host on a vps","/blog/how-to-self-host-on-vps/"
+"nginx proxy manager ssl cloudflare setup",Informational,Low,9.6/10,"how to self host on a vps","/blog/how-to-self-host-on-vps/"
+"self hosted bookmarking with ai tagging",Informational,Very Low,9.2/10,"self hosted bookmark manager","/blog/self-hosted-bookmark-managers/"
+"miniflux vs freshrss comparison",Commercial,Very Low,9.4/10,"self hosted rss reader docker","/blog/self-hosted-rss-reader-docker/"
+"vaultwarden backup automated cron",Transactional,Very Low,9.7/10,"vaultwarden docker compose","/blog/vaultwarden-docker-compose-setup/"
+"lightweight homelab docker stack",Informational,Low,9.3/10,"best self hosted apps","/"
+"open source personal wiki software",Informational,Low,9.1/10,"self hosted note taking app","/category/productivity-apps/"

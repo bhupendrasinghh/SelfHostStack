@@ -1,0 +1,38 @@
+[2026-10-07 18:25:54 UTC] Starting automated LEMP server provisioning on Ubuntu 24.04 LTS...
+Hit:1 http://archive.ubuntu.com/ubuntu noble InRelease
+Hit:2 http://archive.ubuntu.com/ubuntu noble-updates InRelease
+Hit:3 http://security.ubuntu.com/ubuntu noble-security InRelease
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+All packages are up to date.
+Selecting previously unselected package ufw.
+Setting up ufw (0.36.2-1ubuntu1) ...
+Rules updated
+Rules updated (v6)
+Status: active
+
+To                         Action      From
+--                         ------      ----
+22/tcp (SSH)               ALLOW       Anywhere                  
+80/tcp (HTTP)              ALLOW       Anywhere                  
+443/tcp (HTTPS)            ALLOW       Anywhere                  
+22/tcp (SSH (v6))          ALLOW       Anywhere (v6)             
+80/tcp (HTTP (v6))         ALLOW       Anywhere (v6)             
+443/tcp (HTTPS (v6))       ALLOW       Anywhere (v6)             
+
+Selecting previously unselected package nginx.
+Setting up nginx (1.26.0-1ubuntu2) ...
+Synchronizing state of nginx.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install enable nginx
+Created symlink /etc/systemd/system/multi-user.target.wants/nginx.service -> /lib/systemd/system/nginx.service.
+Selecting previously unselected package mariadb-server.
+Setting up mariadb-server (1:10.11.8-0ubuntu0.24.04.1) ...
+Created symlink /etc/systemd/system/mysql.service -> /lib/systemd/system/mariadb.service.
+Created symlink /etc/systemd/system/mysqld.service -> /lib/systemd/system/mariadb.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/mariadb.service -> /lib/systemd/system/mariadb.service.
+Selecting previously unselected package php8.3-fpm.
+Setting up php8.3-fpm (8.3.6-0ubuntu0.24.04.1) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/php8.3-fpm.service -> /lib/systemd/system/php8.3-fpm.service.
+NOTICE: PHP-FPM 8.3 process manager initialized with Unix socket /run/php/php8.3-fpm.sock.
+[2026-10-07 18:26:22 UTC] LEMP core stack packages successfully installed and configured.

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vaultwarden Docker Compose Setup with Automated Backups — SelfHostStack</title>
+  <meta name="description" content="Complete production guide to deploying Vaultwarden (Bitwarden-compatible) with Docker Compose, Nginx reverse proxy, Cloudflare SSL, and automated SQLite backup cron.">
+  <link rel="canonical" href="https://selfhoststack.com/blog/vaultwarden-docker-compose-setup/">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container navbar">
+      <a href="/" class="brand-logo">
+        <span>⚡ SelfHostStack</span>
+        <span class="brand-badge">FOSS</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/category/productivity-apps/">Productivity Apps</a></li>
+          <li><a href="/category/privacy-tools/" class="active">Privacy &amp; Security</a></li>
+          <li><a href="/category/homelab-guides/">Homelab Guides</a></li>
+          <li><a href="/about/">About Lab</a></li>
+          <li><a href="/blog/open-source-notion-alternatives/" class="nav-cta">Featured Guide</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="separator">/</span>
+      <a href="/category/privacy-tools/">Privacy &amp; Security</a>
+      <span class="separator">/</span>
+      <span class="current">Vaultwarden Docker Compose Setup</span>
+    </nav>
+
+    <div class="content-wrapper">
+      <header class="article-header">
+        <h1>Vaultwarden Docker Compose Setup: Production Guide with Backups &amp; SSL</h1>
+        <div class="article-meta">
+          <span>By Ashirwad Pratap Singh</span>
+          <span>&bull;</span>
+          <span>October 7, 2026</span>
+          <span>&bull;</span>
+          <span>Target: <code>vaultwarden docker compose</code> | KD: 18 | Vol: 1,600/mo</span>
+        </div>
+      </header>
+
+      <div class="article-body">
+
+        <div class="callout">
+          <p><strong>Prerequisites</strong>: A Linux VPS with Docker Engine 26+ installed, a custom domain pointed to Cloudflare, and Nginx configured as a reverse proxy. See our <a href="/blog/how-to-self-host-on-vps/">Zero-to-Production VPS Guide</a> first.</p>
+        </div>
+
+        <p>Vaultwarden is a lightweight, open-source, Bitwarden API-compatible server written in Rust. It consumes approximately <strong>10–30 MB of RAM</strong> (versus Bitwarden's official server which requires ~2GB), making it ideal for deployment on any budget cloud VPS. All official Bitwarden browser extensions and mobile applications work natively with Vaultwarden.</p>
+
+        <h2>Architecture Overview</h2>
+        <pre><code>Internet
+  └── Cloudflare (TLS 1.3, Full Strict SSL, CDN)
+        └── Nginx Reverse Proxy (Port 443 → :8080)
+              └── Vaultwarden Container (Port 8080)
+                    └── SQLite Database File (./vw-data/)</code></pre>
+
+        <h2>Step 1: Docker Compose Manifest (Compose V2 Syntax)</h2>
+        <p>Create your project directory and compose file:</p>
+        <pre><code>mkdir -p ~/stacks/vaultwarden && cd ~/stacks/vaultwarden
+nano docker-compose.yml</code></pre>
+
+        <pre><code>services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    environment:
+      DOMAIN: "https://vault.yourdomain.com"
+      SIGNUPS_ALLOWED: "false"          # Disable public registrations
+      ADMIN_TOKEN: ""                   # Set a strong token for /admin panel
+      WEBSOCKET_ENABLED: "true"
+      LOG_LEVEL: "warn"
+      EXTENDED_LOGGING: "true"
+    volumes:
+      - ./vw-data:/data
+    ports:
+      - "8080:80"
+      - "3012:3012"                     # WebSocket notifications</code></pre>
+
+        <h2>Step 2: Nginx Reverse Proxy Configuration</h2>
+        <pre><code>sudo nano /etc/nginx/sites-available/vault.yourdomain.com</code></pre>
+        <pre><code>server {
+    listen 80;
+    server_name vault.yourdomain.com;
+
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # WebSocket support for real-time sync
+    location /notifications/hub {
+        proxy_pass http://localhost:3012;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}</code></pre>
+        <pre><code>sudo ln -s /etc/nginx/sites-available/vault.yourdomain.com /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx</code></pre>
+
+        <h2>Step 3: Launch Vaultwarden</h2>
+        <pre><code>docker compose up -d
+docker compose ps
+docker compose logs vaultwarden</code></pre>
+
+        <h2>Step 4: Automated SQLite Backup Cron Job</h2>
+        <p>Vaultwarden uses a SQLite database stored in <code>./vw-data/db.sqlite3</code>. Set up a daily encrypted backup:</p>
+        <pre><code>sudo crontab -e</code></pre>
+        <pre><code># Run Vaultwarden SQLite backup daily at 2:00 AM
+0 2 * * * docker exec vaultwarden sqlite3 /data/db.sqlite3 ".backup /data/db-backup-$(date +\%Y\%m\%d).sqlite3" && \
+  gzip /home/deploy_admin/stacks/vaultwarden/vw-data/db-backup-$(date +\%Y\%m\%d).sqlite3 2>&1 \
+  | tee -a /var/log/vaultwarden-backup.log</code></pre>
+
+        <h2>Verification Checklist</h2>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr><th>Check</th><th>Command</th><th>Expected</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Container running</td><td><code>docker compose ps</code></td><td>State: running</td></tr>
+              <tr><td>HTTPS access</td><td><code>curl -Iv https://vault.yourdomain.com</code></td><td>200 OK, TLSv1.3</td></tr>
+              <tr><td>RAM consumption</td><td><code>docker stats vaultwarden --no-stream</code></td><td>&lt; 30 MB</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Related Guides</h2>
+        <ul>
+          <li><a href="/blog/self-hosted-bookmark-managers/">Self-Hosted Bookmark Managers (Linkding, Karakeep, Linkwarden)</a></li>
+          <li><a href="/blog/how-to-self-host-on-vps/">Complete VPS Setup Guide: SSH, UFW, Docker &amp; Cloudflare</a></li>
+          <li><a href="/category/privacy-tools/">Browse all Privacy &amp; Security Tools</a></li>
+        </ul>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 SelfHostStack. All Rights Reserved. Built for CSET489 Practical SEO Mini-Project.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
