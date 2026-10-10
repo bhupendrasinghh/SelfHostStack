@@ -47,7 +47,7 @@ cd SelfHostStack
 python3 -m http.server 8000 --directory site
 ```
 
-Visit **[http://localhost:8000](http://localhost:8000)** in your browser.
+Visit **https://selfhoststackfinal.onrender.com** in your browser.
 
 ---
 
