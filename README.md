@@ -7,7 +7,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](#)
 [![SEO Performance](https://img.shields.io/badge/SEO-Optimized-brightgreen.svg)](#)
 
----
+----
 
 ## 📖 Overview
 
