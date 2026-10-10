@@ -2,7 +2,7 @@
 
 **Course**: CSET489: Search Engine Optimization  
 **Project**: SelfHostStack  
-**Author**: Ashirwad Pratap Singh (Roll No: E23CSEU0221)  
+**Author**: Team Cosmic_Coder  
 **Target Score**: 20/20 (Excellent Level)  
 **Date**: October 7, 2026  
 

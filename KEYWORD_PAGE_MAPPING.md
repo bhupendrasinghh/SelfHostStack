@@ -2,7 +2,7 @@
 
 **Course**: CSET489: Search Engine Optimization  
 **Project**: SelfHostStack  
-**Author**: Ashirwad Pratap Singh (Roll No: E23CSEU0221)  
+**Author**: Team Cosmic_Coder  
 **Milestone**: Milestone I (Evaluation Weight: 2 Marks — Target: Excellent 2.0/2.0)  
 
 ---

@@ -4,8 +4,8 @@ import markdown
 
 md_file = r"C:\Users\ASHIRWAD PRATAPSINGH\Downloads\SEO\PROJECT_EVIDENCE\final_report\MILESTONE_I_FINAL_REPORT.md"
 html_out_file = r"C:\Users\ASHIRWAD PRATAPSINGH\Downloads\SEO\PROJECT_EVIDENCE\final_report\report_for_pdf.html"
-pdf_out_file = r"C:\Users\ASHIRWAD PRATAPSINGH\Downloads\SEO\CSET489_SEO_Assignment_E23CSEU0221_Ashirwad_Pratap_Singh.pdf"
-pdf_copy_file = r"C:\Users\ASHIRWAD PRATAPSINGH\Downloads\SEO\PROJECT_EVIDENCE\final_report\CSET489_SEO_Assignment_E23CSEU0221_Ashirwad_Pratap_Singh.pdf"
+pdf_out_file = r"C:\Users\ASHIRWAD PRATAPSINGH\Downloads\SEO\CSET489_SEO_Assignment_Cosmic_Coder.pdf"
+pdf_copy_file = r"C:\Users\ASHIRWAD PRATAPSINGH\Downloads\SEO\PROJECT_EVIDENCE\final_report\CSET489_SEO_Assignment_Cosmic_Coder.pdf"
 
 with open(md_file, "r", encoding="utf-8") as f:
     md_content = f.read()
@@ -205,8 +205,7 @@ html_template = f"""<!DOCTYPE html>
   
   <div>
     <div class="meta-box">
-      <div class="meta-row"><span class="meta-label">Student Name:</span> <span class="meta-val">Ashirwad Pratap Singh</span></div>
-      <div class="meta-row"><span class="meta-label">Roll Number:</span> <span class="meta-val">E23CSEU0221</span></div>
+      <div class="meta-row"><span class="meta-label">Team Name:</span> <span class="meta-val">Cosmic_Coder</span></div>
       <div class="meta-row"><span class="meta-label">Course Code:</span> <span class="meta-val">CSET489 (3 Credits)</span></div>
       <div class="meta-row"><span class="meta-label">Component:</span> <span class="meta-val">Continuous Assessment — Practical Mini-Project</span></div>
       <div class="meta-row"><span class="meta-label">Evaluation Phase:</span> <span class="meta-val">Milestone I (Max Marks: 20)</span></div>

@@ -2,10 +2,9 @@
 # Practical Mini-Project — Milestone I Final Report
 
 **Title**: SelfHostStack: An SEO-Optimized Knowledge Hub for Self-Hosted Open-Source Software  
-**Student Name**: Ashirwad Pratap Singh  
-**Roll No**: E23CSEU0221  
+**Team Name**: Cosmic_Coder  
 **Course Code**: CSET489 | Credits: 3  
-**Submission Mode**: Individual  
+**Submission Mode**: Team  
 **Milestone**: Milestone I — SEO Research, Analysis, Project Design & Deployment  
 **Date**: October 7, 2026  
 **Target Score**: 20/20 (Excellent Level)  

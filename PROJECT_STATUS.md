@@ -2,8 +2,7 @@
 
 **Course**: CSET489: Search Engine Optimization  
 **Project**: Practical Mini-Project Case Study  
-**Student Name**: Ashirwad Pratap Singh  
-**Roll No**: E23CSEU0221  
+**Team Name**: Cosmic_Coder  
 **Milestone Focus**: Milestone I Only (Target: 20/20 - Excellent Level)  
 **Date**: October 7, 2026  
 
@@ -33,7 +32,7 @@
 | Phase 9 | VPS Deployment & Web Server Setup | PENDING | Linux VPS (LEMP/LAMP/OpenLiteSpeed), MySQL, PHP, WordPress, SSH terminal logs in `VPS_DEPLOYMENT.md` |
 | Phase 10 | Professional Functional WordPress Website | PENDING | Functional WP site, Homepage, About, Category/Service, Blog, Responsive UX |
 | Phase 11 | Evidence Collection & Verification | PENDING | `MILESTONE_I_EVIDENCE_CHECKLIST.md` with complete artifact references |
-| Phase 12 | Final Milestone I Academic Report | PENDING | Submission-ready Comprehensive Report (`CSET489_SEO_Assignment_E23CSEU0221_Ashirwad_Pratap_Singh.pdf` / markdown) |
+| Phase 12 | Final Milestone I Academic Report | PENDING | Submission-ready Comprehensive Report (`CSET489_SEO_Assignment_Cosmic_Coder.pdf` / markdown) |
 | Phase 13 | Rubric Self-Audit (Target 20/20) | PENDING | Strict audit against Table-1 Performance Descriptors |
 | Phase 14 | Final Deliverables Summary | PENDING | Live URL, Admin URL, IP, stack summary, viva talking points |
 

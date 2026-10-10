@@ -2,7 +2,7 @@
 
 **Course**: CSET489: Search Engine Optimization  
 **Project**: SelfHostStack  
-**Author**: Ashirwad Pratap Singh (Roll No: E23CSEU0221)  
+**Author**: Team Cosmic_Coder  
 **Git Commit**: `d7a4d81` — 34 files, 3,886 insertions  
 
 ---
@@ -203,7 +203,7 @@ STEP 5: Upload and run deployment script:
 STEP 6: Upload site HTML files to /var/www/selfhoststack/ (or use WordPress admin)
 STEP 7: Take 5 screenshots for PROJECT_EVIDENCE/screenshots/
 STEP 8: Update MILESTONE_I_EVIDENCE_CHECKLIST.md items 25–34 to ✅
-STEP 9: Export final report as PDF → CSET489_SEO_Assignment_E23CSEU0221_Ashirwad_Pratap_Singh.pdf
+STEP 9: Export final report as PDF → CSET489_SEO_Assignment_Cosmic_Coder.pdf
 ```
 
 ---

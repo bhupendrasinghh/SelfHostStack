@@ -2,7 +2,7 @@
 # ==============================================================================
 # Script: verify_server.sh
 # Course: CSET489 Search Engine Optimization - Practical Mini-Project (Milestone I)
-# Author: Ashirwad Pratap Singh (Roll No: E23CSEU0221)
+# Author: Team Cosmic_Coder
 # Project: SelfHostStack Verification & Diagnostics Suite
 # ==============================================================================
 

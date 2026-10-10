@@ -2,7 +2,7 @@
 # ==============================================================================
 # Script: deploy_wordpress_lemp.sh
 # Course: CSET489 Search Engine Optimization - Practical Mini-Project (Milestone I)
-# Author: Ashirwad Pratap Singh (Roll No: E23CSEU0221)
+# Author: Team Cosmic_Coder
 # Project: SelfHostStack (LEMP Stack Automated WordPress Deployment)
 # Target OS: Ubuntu 22.04 / 24.04 LTS
 # ==============================================================================
@@ -27,9 +27,9 @@ WP_DB_NAME="selfhost_wp"
 WP_DB_USER="wp_admin_usr"
 # Generate secure random DB password if not provided
 WP_DB_PASS="${2:-$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9')}"
-WP_ADMIN_USER="ashirwad_admin"
+WP_ADMIN_USER="cosmic_coder"
 WP_ADMIN_PASS="${3:-$(openssl rand -base64 16 | tr -dc 'a-zA-Z0-9')}"
-WP_ADMIN_EMAIL="ashirwad.singh@cset489-seo.local"
+WP_ADMIN_EMAIL="Cosmic_Coder"
 WEB_ROOT="/var/www/selfhoststack"
 
 log_info "Starting Automated LEMP WordPress Deployment for domain: ${DOMAIN_NAME}"

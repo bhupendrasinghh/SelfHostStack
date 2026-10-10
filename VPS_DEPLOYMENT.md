@@ -2,7 +2,7 @@
 
 **Course**: CSET489: Search Engine Optimization  
 **Project**: SelfHostStack  
-**Author**: Ashirwad Pratap Singh (Roll No: E23CSEU0221)  
+**Author**: Team Cosmic_Coder  
 **Milestone**: Milestone I (Evaluation Weight: 2 Marks — Target: Excellent 2.0/2.0)  
 
 ---
@@ -47,11 +47,11 @@ graph TD
 ### Step 1: Secure SSH Key Generation
 On the local administrative machine, a cryptographically secure Ed25519 key pair was generated specifically for this project:
 ```bash
-ssh-keygen -t ed25519 -C "ashirwad.singh@cset489-seo" -f ~/.ssh/id_ed25519_seo
+ssh-keygen -t ed25519 -C "cosmic_coder@cset489-seo" -f ~/.ssh/id_ed25519_seo
 ```
 *Public Key*:
 ```text
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILsBXRx9N8R0v6cyynglQgrBWwESmVkW52yA12LsUNfx ashirwad.singh@cset489-seo
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILsBXRx9N8R0v6cyynglQgrBWwESmVkW52yA12LsUNfx cosmic_coder@cset489-seo
 ```
 
 ### Step 2: Non-Root User & Sudo Privileges
@@ -60,15 +60,15 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILsBXRx9N8R0v6cyynglQgrBWwESmVkW52yA12LsUNfx
 ssh -i ~/.ssh/id_ed25519_seo root@<VPS_IP>
 
 # Create dedicated administrative user
-adduser ashirwad_admin
-usermod -aG sudo ashirwad_admin
+adduser cosmic_coder
+usermod -aG sudo cosmic_coder
 
 # Copy authorized SSH keys to non-root account
-mkdir -p /home/ashirwad_admin/.ssh
-cp /root/.ssh/authorized_keys /home/ashirwad_admin/.ssh/
-chown -R ashirwad_admin:ashirwad_admin /home/ashirwad_admin/.ssh
-chmod 700 /home/ashirwad_admin/.ssh
-chmod 600 /home/ashirwad_admin/.ssh/authorized_keys
+mkdir -p /home/cosmic_coder/.ssh
+cp /root/.ssh/authorized_keys /home/cosmic_coder/.ssh/
+chown -R cosmic_coder:cosmic_coder /home/cosmic_coder/.ssh
+chmod 700 /home/cosmic_coder/.ssh
+chmod 600 /home/cosmic_coder/.ssh/authorized_keys
 ```
 
 ### Step 3: Hardening SSH Daemon (`/etc/ssh/sshd_config.d/security.conf`)
@@ -147,9 +147,9 @@ sudo wp config create \
 sudo wp core install \
     --url="https://selfhoststack.com" \
     --title="SelfHostStack — Open-Source Self-Hosted Software & Privacy Tools" \
-    --admin_user="ashirwad_admin" \
+    --admin_user="cosmic_coder" \
     --admin_password="<REDACTED_ADMIN_PASSWORD>" \
-    --admin_email="ashirwad.singh@cset489-seo.local" \
+    --admin_email="Cosmic_Coder" \
     --skip-email \
     --allow-root
 

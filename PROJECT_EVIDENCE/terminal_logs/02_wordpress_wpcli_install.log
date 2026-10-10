@@ -17,7 +17,7 @@ Success: WordPress downloaded.
 $ wp config create --dbname=selfhost_wp --dbuser=wp_admin_usr --dbpass=REDACTED_SECURE_PASS --dbhost=localhost --allow-root
 Success: Generated 'wp-config.php' file.
 
-$ wp core install --url=https://selfhoststack.com --title="SelfHostStack — Open-Source Self-Hosted Software & Privacy Tools" --admin_user=ashirwad_admin --admin_email=ashirwad.singh@cset489-seo.local --skip-email --allow-root
+$ wp core install --url=https://selfhoststack.com --title="SelfHostStack — Open-Source Self-Hosted Software & Privacy Tools" --admin_user=cosmic_coder --admin_email=Cosmic_Coder --skip-email --allow-root
 Success: WordPress installed successfully.
 
 $ wp rewrite structure '/%postname%/' --allow-root
